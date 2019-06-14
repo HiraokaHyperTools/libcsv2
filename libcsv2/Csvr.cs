@@ -1,10 +1,17 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace kenjiuno.libcsv2
 {
+    /// <summary>
+    /// CSV text reader
+    /// </summary>
     public class Csvr
     {
+        /// <summary>
+        /// String table: `Rows[y][x]` <br />
+        /// `y` and `x` are 0 based array index. <br />
+        /// </summary>
         public String[][] Rows = null;
 
         class Reader
@@ -152,7 +159,42 @@ namespace kenjiuno.libcsv2
             SepAndEOF = Sep | EOF,
         }
 
-        public Csvr ReadStr(String text, char sep, char quote)
+        /// <summary>
+        /// Decode a CSV text
+        /// </summary>
+        /// <param name="text">CSV text</param>
+        /// <param name="sep">A separator character like:
+        /// <list type="bullet">
+        /// <item>`&apos;,&apos;`</item>
+        /// <item>`&apos;\t&apos;`</item>
+        /// </list>
+        /// </param>
+        /// <param name="quote">A quote character like:
+        /// <list type="bullet">
+        /// <item>`&apos;"&apos;`</item>
+        /// </list>
+        /// </param>
+        public Csvr(string text, char sep, char quote)
+        {
+            DecodeCsv(text, sep, quote);
+        }
+
+        /// <summary>
+        /// Create new instance [deprecated]
+        /// </summary>
+        /// <remarks>
+        /// Use new constructor instead:<br />
+        /// ```cs
+        /// new Csvr(text, sep, quote);
+        /// ```
+        /// </remarks>
+        [Obsolete]
+        public Csvr()
+        {
+
+        }
+
+        private void DecodeCsv(string text, char sep, char quote)
         {
             Reader reader = new Reader(text, sep, quote);
             List<String> columns = new List<String>();
@@ -202,6 +244,22 @@ namespace kenjiuno.libcsv2
                 }
             }
             Rows = rows.ToArray();
+        }
+
+        /// <summary>
+        /// Decode a CSV text [deprecated]
+        /// </summary>
+        /// <remarks>
+        /// Use new constructor instead:<br />
+        /// ```cs
+        /// new Csvr(text, sep, quote);
+        /// ```
+        /// </remarks>
+        /// <returns>Self instance</returns>
+        [Obsolete]
+        public Csvr ReadStr(String text, char sep, char quote)
+        {
+            DecodeCsv(text, sep, quote);
             return this;
         }
     }
